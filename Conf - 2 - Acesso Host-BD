@@ -1,0 +1,12 @@
+/Considere que o SO Linux está na rede 192.168.0.0/24.
+//Nos arquivos de configuração do PostgreSql faça as alterações necessárias de modo a permitir o acesso ao banco de dados por qualquer computador na rede.
+
+//Alterações no postgresql.conf para disponibilizar o servidor para um ip específico
+
+listen_adresses='localhost,192.168.0.0/24' 
+Port =5432(default)
+
+
+//Alterações no pg_hba.conf para disponibilizar um banco dbPolicia para a rede 192.168.0.0/24 
+
+host       dbPolicia          all        192.168.0.0/24       md5

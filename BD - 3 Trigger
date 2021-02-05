@@ -1,0 +1,80 @@
+- Trigger Function
+
+CREATE OR REPLACE FUNCTION conveniencia.aud_venda_insert()
+RETURNS trigger
+AS $$
+    begin
+insert into conveniencia.vendas_auditoria
+(tipo,codigo,data_criacao,valor_frete,valor_desconto,valor_total,status,observacao,data_hora_entrega,codigo_cliente,codigo_usuario)
+values('inserir',NEW.codigo,NEW.data_criacao,NEW.valor_frete,NEW.valor_desconto,NEW.valor_total,NEW.status,NEW.observacao,NEW.data_hora_entrega,NEW.codigo_cliente,NEW.codigo_usuario);
+	 return new;
+    end;
+$$ LANGUAGE plpgsql;
+
+
+--Trigger 
+
+CREATE TRIGGER exe_aud_venda_insert AFTER INSERT
+ON conveniencia.venda FOR EACH ROW 
+  EXECUTE PROCEDURE conveniencia.aud_venda_insert ();
+  
+
+-- teste de inserção 
+ 
+insert into conveniencia.venda
+values
+(4,'2021-02-02',100,2,98,'0','1','2021-02-02 08:00:00',1,1);
+  
+ 
+ 
+ -- Trigger Function 
+ 
+  CREATE OR REPLACE FUNCTION conveniencia.aud_venda_UPDATE()
+RETURNS trigger
+AS $$
+    begin
+insert into conveniencia.vendas_auditoria
+(tipo,codigo,data_criacao,valor_frete,valor_desconto,valor_total,status,observacao,data_hora_entrega,codigo_cliente,codigo_usuario)
+values('UPDATE',OLD.codigo,OLD.data_criacao,OLD.valor_frete,OLD.valor_desconto,OLD.valor_total,OLD.status,OLD.observacao,OLD.data_hora_entrega,OLD.codigo_cliente,OLD.codigo_usuario);
+	 return OLD;
+    end;
+$$ LANGUAGE plpgsql;
+
+
+--Trigger 
+
+CREATE TRIGGER exe_aud_venda_UPDATE AFTER UPDATE
+ON conveniencia.venda FOR EACH ROW 
+  EXECUTE PROCEDURE conveniencia.aud_venda_UPDATE ();
+ 
+ 
+--teste alteração  
+
+UPDATE conveniencia.venda SET status = '1' WHERE codigo =4;
+  
+  
+  
+-- Trigger Function
+
+CREATE OR REPLACE FUNCTION conveniencia.aud_venda_DELETE()
+RETURNS trigger
+AS $$
+    begin
+insert into conveniencia.vendas_auditoria
+(tipo,codigo,data_criacao,valor_frete,valor_desconto,valor_total,status,observacao,data_hora_entrega,codigo_cliente,codigo_usuario)
+values('DELETE',OLD.codigo,OLD.data_criacao,OLD.valor_frete,OLD.valor_desconto,OLD.valor_total,OLD.status,OLD.observacao,OLD.data_hora_entrega,OLD.codigo_cliente,OLD.codigo_usuario);
+	 return OLD;
+    end;
+$$ LANGUAGE plpgsql;
+
+
+--Trigger 
+
+CREATE TRIGGER exe_aud_venda_DELETE AFTER DELETE
+ON conveniencia.venda FOR EACH ROW 
+  EXECUTE PROCEDURE conveniencia.aud_venda_DELETE ();
+  
+  
+--teste exclusão
+
+DELETE from conveniencia.venda WHERE codigo =4;

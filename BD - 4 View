@@ -1,0 +1,22 @@
+--criação de uma View materializada
+
+CREATE  MATERIALIZED VIEW IF NOT EXISTS conveniencia.materializada (nome_cliente,nome_etilo)  AS 
+SELECT conveniencia.cliente.nome, conveniencia.estilo.nome
+from conveniencia.cliente inner join   conveniencia.venda 
+on conveniencia.cliente.codigo = conveniencia.venda.codigo_cliente
+inner join   conveniencia.item_venda 
+on conveniencia.venda.codigo = conveniencia.item_venda.codigo_venda
+inner join   conveniencia.cerveja 
+on conveniencia.item_venda.codigo_cerveja = conveniencia.cerveja.codigo
+inner join   conveniencia.estilo 
+on conveniencia.cerveja.codigo_estilo = conveniencia.estilo.codigo;
+
+
+--Comando para atualizar a View Materializada
+
+REFRESH MATERIALIZED VIEW  conveniencia.materializada;
+
+
+--SELECT para verificarmos se os registros foram realmente inseridos com sucesso
+
+SELECT * FROM conveniencia.materializada;

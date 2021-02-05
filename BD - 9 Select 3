@@ -1,0 +1,9 @@
+SELECT  conveniencia.usuario.nome, sum(conveniencia.venda.valor_total*conveniencia.cerveja.comissao)  as valor_comissao
+FROM conveniencia.usuario inner join conveniencia.venda 
+on conveniencia.usuario.codigo = conveniencia.venda.codigo_usuario
+inner join conveniencia.item_venda 
+on conveniencia.venda.codigo = conveniencia.item_venda.codigo_venda
+inner join conveniencia.cerveja 
+on conveniencia.cerveja.codigo = conveniencia.item_venda.codigo_cerveja
+where conveniencia.usuario.codigo=1
+group by conveniencia.usuario.nome; 

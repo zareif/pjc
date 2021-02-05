@@ -1,0 +1,5 @@
+SELECT conveniencia.cerveja.nome as nome_cerveja,
+COALESCE((select sum(conveniencia.item_venda.quantidade) FROM conveniencia.item_venda 
+where conveniencia.cerveja.codigo = conveniencia.item_venda.codigo_cerveja),0)  AS Qtd_Total 
+FROM conveniencia.cerveja 
+order by Qtd_Total desc;

@@ -1,0 +1,43 @@
+De acordo com(https://www.digitalocean.com/community/tutorials/how-to-set-up-an-object-storage-server-using-minio-on-ubuntu-18-04-pt)
+
+De soluções de backup baseadas na nuvem até a alta disponibilidade redes de entrega de conteúdo (CDNs), 
+a capacidade de armazenar blobs não estruturados de dados de objetos e torná-los acessíveis por meio de APIs HTTP,
+conhecidas como armazenamento de objeto ou object storage, tornou-se parte integrante do cenário da tecnologia moderna.
+
+O Minio é um popular servidor de armazenamento de objetos open-source compatível com o Serviço de armazenamento 
+em nuvem Amazon S3. As aplicações que foram configuradas para conversar com o Amazon S3 também podem ser 
+configuradas para conversar com o Minio, permitindo que o Minio seja uma alternativa viável ao S3 se você 
+quiser ter mais controle sobre o servidor de armazenamento de objetos. O serviço armazena dados não estruturados como fotos, 
+vídeos, arquivos de log, backups e imagens de container/VM, e pode até mesmo fornecer um servidor de 
+armazenamento de objeto único que agrupa várias unidades espalhadas por muitos servidores.
+
+O Minio é escrito em Go, vem com um cliente de linha de comando mais uma interface web, e suporta 
+serviço de enfileiramento simples para alvos com o protocolo Advanced Message Queuing (AMQP), 
+Elasticsearch, Redis, NATS. Por todos esses motivos, aprender a configurar um servidor de armazenamento de objetos 
+Minio pode adicionar uma ampla variedade de flexibilidade e utilidade ao seu projeto.
+
+
+------------------------------------
+
+De acordo com (http://pgdocptbr.sourceforge.net/pg80/maintenance.html)
+
+Rotina de Limpeza
+
+O comando VACUUM do PostgreSQL deve ser executado regularmente por diversos motivos:
+
+    Para recuperar o espaço em disco ocupado pelas linhas atualizadas e removidas.
+
+    Para atualizar as estatísticas dos dados utilizadas pelo planejador de comandos do PostgreSQL.
+
+    Para proteger contra perda de dados muito antigos devido ao recomeço do ID de transação.
+
+A freqüência e a abrangência das operações de VACUUM, realizadas devido aos motivos acima, variam dependendo das necessidades da instalação. 
+Portanto, os administradores de banco de dados devem compreender estas questões e desenvolver uma estratégia de manutenção apropriada. 
+Esta seção se concentra em explicar as questões de alto nível; para obter detalhes sobre a sintaxe do comando e outras informações deve 
+ser consultada a página de referência do comando VACUUM.
+
+A partir do PostgreSQL 7.2 a forma padrão do comando VACUUM pode executar em paralelo com as operações normais do banco de dados 
+(seleções, inserções, atualizações, exclusões, mas sem modificação de definição de tabela). Portanto, a rotina de limpeza não é mais tão impactante como era nas versões anteriores, não sendo mais tão crítico tentar agendá-la para as horas do dia com baixa utilização.
+
+A partir do PostgreSQL 8.0 passaram a existir parâmetros de configuração que podem ser ajustados para reduzir ainda mais o impacto da 
+limpeza em segundo plano. Consulte a Seção 16.4.3.4.

@@ -1,0 +1,38 @@
+//Atualizando o ubuntu
+
+Sudo apt upgrade
+sudo apt update
+
+
+//Instalação do Docker:
+
+sudo apt install docker.io
+docker –version
+
+
+//instalação do curl:
+
+sudo apt update 
+sudo apt install curl 
+curl --version 
+
+
+//Documentação Docker Compose: https://docs.docker.com/compose/install 
+//Instalação do Docker Compose: 
+
+sudo apt update 
+sudo curl -L "https://github.com/docker/compose/rel... -s)-$(uname -m)" -o /usr/local/bin/docker-compose -sudo chmod +x /usr/local/bin/docker-compose 
+docker-compose –version
+
+
+//imagens baixadas através do comando docker pull:
+
+sudo docker pull postgres:12
+sudo docker pull dpage/pgadmin4
+sudo docker pull minio/minio
+
+
+//Criando rede englobando containers que possuam alguma relação entre si constituem mais uma das estruturas disponibilizadas pela Docker. 
+
+docker network create --driver bridge redepolicial
+docker network ls = mostra a rede criada

@@ -1,0 +1,155 @@
+-- -----------------------------------------------------
+-- Schema conveniencia
+-- -----------------------------------------------------
+CREATE SCHEMA conveniencia AUTHORIZATION postgres;
+
+
+CREATE TABLE IF NOT EXISTS conveniencia.estado (
+  codigo BIGINT NOT NULL,
+  nome VARCHAR(50) NOT NULL,
+  sigla VARCHAR(2) NOT NULL,
+  PRIMARY KEY (codigo));
+
+CREATE TABLE IF NOT EXISTS conveniencia.cidade (
+  codigo BIGINT NOT NULL,
+  nome VARCHAR(50) NOT NULL,
+  codigo_estado BIGINT NOT NULL,
+  PRIMARY KEY (codigo),
+  CONSTRAINT fk_cidade_estado1 FOREIGN KEY (codigo_estado) REFERENCES conveniencia.estado (codigo) ON DELETE NO ACTION ON UPDATE NO ACTION);
+
+CREATE TABLE IF NOT EXISTS conveniencia.cliente (
+  codigo BIGINT NOT NULL ,
+  nome VARCHAR(80) NOT NULL,
+  tipo_pessoa VARCHAR(15) NOT NULL,
+  cpf_cnpj VARCHAR(30) NOT NULL,
+  telefone VARCHAR(20) NULL,
+  email VARCHAR(50) NOT NULL,
+  logradouro VARCHAR(50) NULL,
+  numero VARCHAR(15) NULL,
+  complemento VARCHAR(20) NULL,
+  cep VARCHAR(15) NULL,
+  codigo_cidade BIGINT NOT NULL,
+  PRIMARY KEY (codigo),
+  CONSTRAINT fk_cliente_cidade
+    FOREIGN KEY (codigo_cidade)
+    REFERENCES conveniencia.cidade (codigo)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+CREATE TABLE IF NOT EXISTS conveniencia.usuario (
+  codigo INT NOT NULL ,
+  nome VARCHAR(50) NOT NULL,
+  email VARCHAR(50) NOT NULL,
+  senha VARCHAR(120) NULL,
+  ativo SMALLINT NOT NULL,
+  datanascimento DATE NULL,
+  PRIMARY KEY (codigo));
+
+CREATE TABLE IF NOT EXISTS conveniencia.venda (
+  codigo BIGINT NOT NULL ,
+  data_criacao TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT now() NOT NULL,
+  valor_frete DECIMAL NULL,
+  valor_desconto DECIMAL NULL,
+  valor_total DECIMAL NOT NULL,
+  status VARCHAR(30) NOT NULL,
+  observacao VARCHAR(30) NULL,
+  data_hora_entrega TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT now() NULL,
+  codigo_cliente BIGINT NOT NULL,
+  codigo_usuario BIGINT NOT NULL,
+  PRIMARY KEY (codigo),
+  CONSTRAINT fk_venda_cliente1
+    FOREIGN KEY (codigo_cliente)
+    REFERENCES conveniencia.cliente (codigo)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT fk_venda_usuario1
+    FOREIGN KEY (codigo_usuario)
+    REFERENCES conveniencia.usuario (codigo)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+CREATE TABLE IF NOT EXISTS conveniencia.item_venda (
+  codigo BIGINT NOT NULL ,
+  quantidade INTEGER NOT NULL,
+  valor_unitario DECIMAL(10,2) NOT NULL,
+  codigo_cerveja BIGINT NOT NULL,
+  codigo_venda BIGINT NOT NULL,
+  PRIMARY KEY (codigo),
+  CONSTRAINT fk_item_venda_cerveja1
+    FOREIGN KEY (codigo_cerveja)
+    REFERENCES conveniencia.cerveja (codigo)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT fk_item_venda_venda1
+    FOREIGN KEY (codigo_venda)
+    REFERENCES conveniencia.venda (codigo)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+CREATE TABLE IF NOT EXISTS conveniencia.grupo (
+  codigo BIGINT NOT NULL ,
+  nome VARCHAR(50) NOT NULL,
+  PRIMARY KEY (codigo));
+
+CREATE TABLE IF NOT EXISTS conveniencia.usuario_grupo (
+  codigo_usuario BIGINT NOT NULL,
+  codigo_grupo BIGINT NOT NULL,
+  PRIMARY KEY (codigo_usuario, codigo_grupo),
+  CONSTRAINT fk_usuario_has_grupo_usuario1
+    FOREIGN KEY (codigo_usuario)
+    REFERENCES conveniencia.usuario (codigo)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT fk_usuario_has_grupo_grupo1
+    FOREIGN KEY (codigo_grupo)
+    REFERENCES conveniencia.grupo (codigo)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+CREATE TABLE IF NOT EXISTS conveniencia.permissao (
+  codigo BIGINT NOT NULL ,
+  nome VARCHAR(50) NOT NULL,
+  PRIMARY KEY (codigo));
+
+CREATE TABLE IF NOT EXISTS conveniencia.grupo_permissao (
+  codigo_grupo BIGINT NOT NULL,
+  codigo_permissao BIGINT NOT NULL,
+  PRIMARY KEY (codigo_grupo, codigo_permissao),
+  
+  CONSTRAINT fk_permissao_has_grupo_grupo1
+    FOREIGN KEY (codigo_grupo)
+    REFERENCES conveniencia.grupo (codigo)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+	
+	CONSTRAINT fk_permissao_has_grupo_permissao1
+    FOREIGN KEY (codigo_permissao)
+    REFERENCES conveniencia.permissao (codigo)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+CREATE TABLE IF NOT EXISTS conveniencia.estilo (
+  codigo BIGINT NOT NULL ,
+  nome VARCHAR(50) NOT NULL,
+  PRIMARY KEY (codigo));
+
+CREATE TABLE IF NOT EXISTS conveniencia.cerveja (
+  codigo BIGINT NOT NULL ,
+  sku VARCHAR(50) NOT NULL,
+  nome VARCHAR(80) NOT NULL,
+  descricao TEXT NOT NULL,
+  valor DECIMAL NOT NULL,
+  teor_alcoolico DECIMAL NOT NULL,
+  comissao DECIMAL NOT NULL,
+  sabor VARCHAR(50) NOT NULL,
+  origem VARCHAR(50) NOT NULL,
+  quantidade_estoque INTEGER NULL,
+  foto VARCHAR(100),
+  content_type VARCHAR(100) NULL,
+  codigo_estilo BIGINT NOT NULL,
+  PRIMARY KEY (codigo),
+  CONSTRAINT fk_cerveja_estilo1
+    FOREIGN KEY (codigo_estilo)
+    REFERENCES conveniencia.estilo (codigo)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);

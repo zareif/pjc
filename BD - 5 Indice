@@ -1,0 +1,32 @@
+EXPLAIN ANALYSE SELECT * from conveniencia.cliente WHERE conveniencia.cliente.cpf_cnpj='89978835300'; 
+
+
+--EXPLAIN ANALYSE utilizado para executar a consulta e observar o desempenho.
+
+--ANTES DE CRIAR O INDICE:
+
+--"Seq Scan on cliente  (cost=0.00..33.50 rows=1 width=127) (actual time=0.153..0.196 rows=1 loops=1)"
+--"  Filter: ((cpf_cnpj)::text = '89978835187'::text)"
+--"  Rows Removed by Filter: 999"
+--"Planning Time: 0.118 ms"
+--"Execution Time: 0.208 ms"
+
+CREATE INDEX idx_conveniencia_cliente_cpf_cnpj  ON conveniencia.cliente USING HASH (cpf_cnpj);
+
+--CREATE INDEX nomeindice ON tabela (campo); 
+--nome de índice: idx_nometabela_nomecampo 
+--CREATE INDEX idx_aluno ON Alunos USING hash (codAluno);
+
+EXPLAIN ANALYSE SELECT * from conveniencia.cliente WHERE conveniencia.cliente.cpf_cnpj='89978835300'; 
+
+
+--APÓS CRIAR O INDICE:
+
+--"Index Scan using idx_conveniencia_cliente_cpf_cnpj on cliente  (cost=0.00..8.02 rows=1 width=127) (actual time=0.015..0.016 rows=1 loops=1)"
+--"  Index Cond: ((cpf_cnpj)::text = '89978835300'::text)"
+--"Planning Time: 0.132 ms"
+--"Execution Time: 0.049 ms"
+
+-- Diferença:
+--"Execution Time: 0.208 ms"  (sem indice)
+--"Execution Time: 0.049 ms"  (com indice)

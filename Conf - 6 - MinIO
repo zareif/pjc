@@ -1,0 +1,6 @@
+--1º criando o MinIO Cliente
+docker pull minio/mc
+
+--2º criando o bucket com uma url
+export MC_HOST_minio="http://172.17.0.2:9000/minio/ "
+docker run minio/mc mb pgsql-bkp

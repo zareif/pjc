@@ -1,0 +1,35 @@
+--criando o usuario usr_relatorio
+
+CREATE ROLE usr_relatorio WITH NOINHERIT NOREPLICATION LOGIN PASSWORD 'root'; 
+
+
+--exibindo os privilegios do usuario usr_relatorio
+
+SELECT * FROM information_schema.role_table_grants where grantee='usr_relatorio';
+
+
+--removogando os privilegios do usuario usr_relatorio
+
+REVOKE ALL PRIVILEGES ON DATABASE dbPolicia FROM usr_relatorio;
+REVOKE ALL PRIVILEGES ON SCHEMA conveniencia FROM usr_relatorio;
+REVOKE ALL PRIVILEGES ON ALL TABLES IN SCHEMA conveniencia FROM usr_relatorio;
+REVOKE ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA conveniencia FROM usr_relatorio;
+REVOKE ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA conveniencia FROM usr_relatorio;
+
+
+--exibindo os privilegios do usuario usr_relatorio
+
+SELECT * FROM information_schema.role_table_grants where grantee='usr_relatorio';
+
+
+--Concedendo privilegios ao usuario usr_relatorio
+
+GRANT CONNECT ON DATABASE dbPolicia TO usr_relatorio;
+GRANT USAGE ON SCHEMA conveniencia TO usr_relatorio;
+GRANT SELECT ON conveniencia.materializada TO usr_relatorio;
+GRANT SELECT ON conveniencia.vendas_auditoria TO usr_relatorio;
+
+
+--exibindo os privilegios do usuario usr_relatorio
+
+SELECT * FROM information_schema.role_table_grants where grantee='usr_relatorio';
